@@ -4,6 +4,7 @@ import com.example.TrainDemo.exception.TrainNotFoundException;
 import com.example.TrainDemo.model.Train;
 import com.example.TrainDemo.repository.TrainSystemRepository;
 import com.example.TrainDemo.service.TrainSystemService;
+import com.mysql.cj.util.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -61,10 +62,19 @@ public class TrainSystemServiceImpl implements TrainSystemService {
         List<Train> resultTrains = new ArrayList<>();
         for(Train train: trains){
             List<String> stations = train.getStations();
-            if (stations.contains(src) && stations.contains(des)) {
+            if (stationCheck(stations, src) && stationCheck(stations, des)) {
                 resultTrains.add(train);
             }
         }
         return resultTrains;
+    }
+
+    private boolean stationCheck(List<String> stations, String tempStation){
+        for(String station : stations){
+            if(station.equalsIgnoreCase(tempStation)){
+                return true;
+            }
+        }
+        return false;
     }
 }
